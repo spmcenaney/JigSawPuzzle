@@ -103,9 +103,15 @@ bool cluster::checkPiece(piece p) {
   }
   if (fits) {
     addPiece(p);
+    cout << "added:" << endl;
     u.printBoard(m_pieces,m_rows,m_cols);
     return true;
   } else {
     return false;
   }
+}
+
+void cluster::print() {
+  cout << "print:" << endl;
+  u.printBoard(m_pieces,m_rows,m_cols);
 }

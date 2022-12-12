@@ -45,6 +45,13 @@ class cluster {
     //Pre: Nothing required
     //Post: Returns position
     int getNumPieces() {return m_numPieces;}
+
+    //Purpose: Getter for position
+    //Pre: Nothing required
+    //Post: Returns position
+    piece getPiece(int loc) {return m_cluster.at(loc);}
+
+    void print();
   private:
 
     Utilities u;

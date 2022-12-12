@@ -82,9 +82,11 @@ void board::solve() {
   /*cluster c;
   c.createCluster(m_rows,m_cols,m_pieces[2][2]);
   c.checkPiece(m_pieces[2][3]);*/
-  cluster *curCluster;
+  cluster *currentCluster;
+  cluster *compareCluster;
   cluster copyCluster;
-  int numPieces;
+  //int numPieces;
+  int nextPiece;
 
   priority_queue<pair<int,cluster*>> Q;
   pair<int,string> p;
@@ -92,14 +94,56 @@ void board::solve() {
   // initial runs
   for (int i = 0; i < m_rows; i ++) {
     for (int j = 0; j < m_cols; j ++) {
-      curCluster = new cluster();
-      curCluster->createCluster(m_rows,m_cols,m_pieces[i][j]);
-      numPieces = curCluster->getNumPieces();
-      Q.push(make_pair(numPieces,curCluster));
+      currentCluster = new cluster();
+      currentCluster->createCluster(m_rows,m_cols,m_pieces[i][j]);
+      //numPieces = curCluster->getNumPieces();
+      nextPiece = u.randNum(1,100);
+      Q.push(make_pair(nextPiece,currentCluster));
     }
   }
 
-  for (int i = 0; i < m_rows*m_cols; i ++) {
+  int runs = 0;
+  int numCurrentPieces;
+  int numComparePieces;
+  piece currentPiece;
+  piece comparePiece;
+  while (true) {
+    currentCluster = Q.top().second;
+    Q.pop();
+    compareCluster = Q.top().second;
+    //Q.pop();
+
+    currentCluster->print();
+    compareCluster->print();
+
+    numCurrentPieces = currentCluster->getNumPieces();
+    numComparePieces = compareCluster->getNumPieces();
+
+    //for (int i = 0; i < numCurrentPieces; i++ ) {
+      for (int j = 0; j < numComparePieces; j++) {
+        //currentPiece = currentCluster->getPiece(i);
+        comparePiece = compareCluster->getPiece(j);
+        if (currentCluster->checkPiece(comparePiece)) {
+          delete Q.top().second;
+          Q.pop();
+          break;
+        }
+      }
+    //}
+
+    nextPiece = u.randNum(1,100);
+    Q.push(make_pair(nextPiece,currentCluster));
+
+    if (runs > 20) {
+      break;
+    }
+    runs++;
+  }
+
+  int s = Q.size();
+  cout << "size: " << s << endl;
+
+  for (int i = 0; i < s; i ++) {
     delete Q.top().second;
     Q.pop();
   }
