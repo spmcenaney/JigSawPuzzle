@@ -2,6 +2,8 @@
 #ifndef CLUSTER_H
 #define CLUSTER_H
 
+#include <vector>
+
 #include "p1.h"
 #include "piece.h"
 //#include "dungeon.h"
@@ -38,10 +40,17 @@ class cluster {
     //Post: copies variables of cluster to inputted cluster
     //void copy_cluster(const cluster &c);
     void createCluster(int rows, int cols, piece p);
+
+    //Purpose: Getter for position
+    //Pre: Nothing required
+    //Post: Returns position
+    int getNumPieces() {return m_numPieces;}
   private:
 
     Utilities u;
     int m_numPieces;
+
+    vector<piece> m_cluster;
 
     int m_rows;
     int m_cols;

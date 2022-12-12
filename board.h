@@ -16,7 +16,7 @@ class board {
     //Purpose: Default constructor for the board
     //Pre:
     //Post:
-    board();
+    //board();
     //Purpose: Default constructor for the board
     //Pre:
     //Post:
@@ -28,11 +28,13 @@ class board {
     //Purpose: constructor for the board
     //Pre:
     //Post:
-    board(const board &b);
+    /*board(const board &b);*/
     //Purpose: copy board
     //Pre:
     //Post: copies variables of board to inputted board
     void copy_board(const board &b);
+
+    void solve();
   private:
     Utilities u;
     int m_rows;

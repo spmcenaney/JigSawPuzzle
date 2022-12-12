@@ -5,10 +5,12 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>
+#include <queue>
+
 using namespace std;
 
-board::board() {           // default constructor
-}
+/*board::board() {           // default constructor
+}*/
 board::~board() {           // default constructor
   for (int i = 0; i < m_rows; i ++) {
     delete [] m_pieces[i];
@@ -23,14 +25,16 @@ board::board(int rows, int cols) {
   assignPieces();
   //printBoard();
   u.printBoard(m_pieces,rows,cols);
-  cluster c;
+  u.printIDs(m_pieces,rows,cols);
+  /*cluster c;
   c.createCluster(m_rows,m_cols,m_pieces[2][2]);
+  c.checkPiece(m_pieces[2][3]);*/
 }
-board::board(const board &b) {
-}
+/*board::board(const board &b) {
+}*/
 
-void board::copy_board(const board &b) {
-}
+/*void board::copy_board(const board &b) {
+}*/
 
 
 void board::createBoard(int rows, int cols) {
@@ -74,31 +78,29 @@ void board::assignPieces() {
   }
 }
 
-/*void board::printBoard() {
+void board::solve() {
+  /*cluster c;
+  c.createCluster(m_rows,m_cols,m_pieces[2][2]);
+  c.checkPiece(m_pieces[2][3]);*/
+  cluster *curCluster;
+  cluster copyCluster;
+  int numPieces;
+
+  priority_queue<pair<int,cluster*>> Q;
+  pair<int,string> p;
+
+  // initial runs
   for (int i = 0; i < m_rows; i ++) {
     for (int j = 0; j < m_cols; j ++) {
-      cout << "|  ";
-      cout << setw(2) << setfill('0') << m_pieces[i][j].getSide(TOP);
-      cout << "  |";
+      curCluster = new cluster();
+      curCluster->createCluster(m_rows,m_cols,m_pieces[i][j]);
+      numPieces = curCluster->getNumPieces();
+      Q.push(make_pair(numPieces,curCluster));
     }
-    cout << "\n";
-    for (int j = 0; j < m_cols; j ++) {
-      cout << "|";
-      cout << setw(2) << setfill('0') << m_pieces[i][j].getSide(LEFT);
-      cout << "  ";
-      cout << setw(2) << setfill('0') << m_pieces[i][j].getSide(RIGHT);
-      cout << "|";
-    }
-    cout << "\n";
-    for (int j = 0; j < m_cols; j ++) {
-      cout << "|  ";
-      cout << setw(2) << setfill('0') << m_pieces[i][j].getSide(BOTTOM);
-      cout << "  |";
-    }
-    cout << "\n";
-    for (int j = 0; j < m_cols; j ++) {
-      cout << "--------";
-    }
-    cout << "\n";
   }
-}*/
+
+  for (int i = 0; i < m_rows*m_cols; i ++) {
+    delete Q.top().second;
+    Q.pop();
+  }
+}

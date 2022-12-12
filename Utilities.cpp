@@ -33,4 +33,15 @@ void Utilities::printBoard(piece ** m_pieces, int m_rows, int m_cols) {
     }
     cout << "\n";
   }
+  cout << "\n";
+}
+
+void Utilities::printIDs(piece ** m_pieces, int m_rows, int m_cols) {
+  for (int i = 0; i < m_rows; i ++) {
+    for (int j = 0; j < m_cols; j ++) {
+      cout << setw(2) << setfill('0') << m_pieces[i][j].getID() << " ";
+    }
+    cout << "\n";
+  }
+  cout << "\n";
 }

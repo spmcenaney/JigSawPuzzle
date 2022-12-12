@@ -23,5 +23,6 @@ class Utilities {
     int randNum(const int min, const int max);
 
     void printBoard(piece ** m_pieces, int m_rows, int m_col);
+    void printIDs(piece ** m_pieces, int m_rows, int m_col);
 };
 #endif
