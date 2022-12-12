@@ -79,11 +79,8 @@ void board::assignPieces() {
 }
 
 void board::solve() {
-  /*cluster c;
-  c.createCluster(m_rows,m_cols,m_pieces[2][2]);
-  c.checkPiece(m_pieces[2][3]);*/
   cluster *currentCluster;
-  cluster *compareCluster;
+  cluster *compCluster;
   cluster copyCluster;
   //int numPieces;
   int nextPiece;
@@ -103,38 +100,47 @@ void board::solve() {
   }
 
   int runs = 0;
-  int numCurrentPieces;
-  int numComparePieces;
-  piece currentPiece;
-  piece comparePiece;
+  int numCopyPieces;
+  int numCompPieces;
+  //piece copyPiece;
+  piece compPiece;
   while (true) {
-    currentCluster = Q.top().second;
+    copyCluster.copy_cluster(*Q.top().second);
+    //delete Q.top().second;
     Q.pop();
-    compareCluster = Q.top().second;
+    compCluster = Q.top().second;
     //Q.pop();
 
-    currentCluster->print();
-    compareCluster->print();
+    /*cout << "copy: " << endl;
+    copyCluster.print();
+    cout << "compare: " << endl;
+    compCluster->print();*/
 
-    numCurrentPieces = currentCluster->getNumPieces();
-    numComparePieces = compareCluster->getNumPieces();
+    //numCopyPieces = copyCluster.getNumPieces();
+    numCompPieces = compCluster->getNumPieces();
 
-    //for (int i = 0; i < numCurrentPieces; i++ ) {
-      for (int j = 0; j < numComparePieces; j++) {
-        //currentPiece = currentCluster->getPiece(i);
-        comparePiece = compareCluster->getPiece(j);
-        if (currentCluster->checkPiece(comparePiece)) {
-          delete Q.top().second;
-          Q.pop();
-          break;
-        }
+    for (int j = 0; j < numCompPieces; j++) {
+      compPiece = compCluster->getPiece(j);
+      if (copyCluster.checkPiece(compPiece)) {
+        delete Q.top().second;
+        Q.pop();
+        break;
       }
-    //}
+    }
 
+    compCluster = &copyCluster;
     nextPiece = u.randNum(1,100);
-    Q.push(make_pair(nextPiece,currentCluster));
+    /*cout << "new: " << endl;
+    compCluster->print();*/
+    Q.push(make_pair(nextPiece,new cluster(copyCluster)));
 
-    if (runs > 20) {
+    compCluster = Q.top().second;
+    /*cout << "next21: " << endl;
+    compCluster->print();*/
+    //compCluster = &copyCluster;
+    //delete compCluster;
+
+    if (runs > 100) {
       break;
     }
     runs++;

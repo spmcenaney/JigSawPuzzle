@@ -22,7 +22,7 @@ class cluster {
     //Purpose: constructor for the cluster
     //Pre:
     //Post:
-    //cluster(const cluster &c);
+    cluster(const cluster &c);
     //Purpose:
     //Pre:
     //Post:
@@ -38,7 +38,7 @@ class cluster {
     //Purpose: copy cluster
     //Pre:
     //Post: copies variables of cluster to inputted cluster
-    //void copy_cluster(const cluster &c);
+    void copy_cluster(const cluster &c);
     void createCluster(int rows, int cols, piece p);
 
     //Purpose: Getter for position

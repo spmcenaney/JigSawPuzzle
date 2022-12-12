@@ -1,10 +1,16 @@
 //cluster.cpp
 #include "cluster.h"
 
+#include <stdlib.h> // for malloc
+
 cluster::cluster() {           // default constructor
-    m_numPieces = 0;
-    m_rows = 0;
-    m_cols = 0;
+  m_numPieces = 0;
+  m_rows = 0;
+  m_cols = 0;
+}
+
+cluster::cluster(const cluster &c) {           // default constructor
+  copy_cluster(c);
 }
 
 cluster::~cluster() {           // default constructor
@@ -13,6 +19,35 @@ cluster::~cluster() {           // default constructor
   }
   delete [] m_pieces;
   //m_pieces = nullptr;
+}
+
+void cluster::copy_cluster(const cluster &c) {
+  m_numPieces = c.m_numPieces;
+  m_rows = c.m_rows;
+  m_cols = c.m_cols;
+  m_pieces = new piece*[m_rows];
+  for (int i = 0; i < m_rows; i ++) {
+    m_pieces[i] = new piece[m_cols];
+  }
+  /**m_pieces = c.m_pieces[0];
+  for (int i = 0; i < m_rows; i ++) {
+    m_pieces[i] = c.m_pieces[i];
+  }*/
+  //copy(&c.m_pieces[0][0],&m_pieces*)
+
+  //*m_pieces = c.m_pieces[0];
+  for (int i = 0; i < m_rows; i ++) {
+    //m_pieces[i] = c.m_pieces[i];
+    for (int j = 0; j < m_cols; j ++) {
+      m_pieces[i][j].copy_piece(c.m_pieces[i][j]);
+    }
+  }
+  m_cluster.clear();
+  //cout << "c size: " << c.m_cluster.size() << endl;
+  //cout << "c size: " << c.m_numPieces << endl;
+  for (int i = 0; i < c.m_numPieces; i++) {
+    m_cluster.push_back(c.m_cluster[i]);
+  }
 }
 
 void cluster::createCluster(int rows, int cols, piece p) {
@@ -37,6 +72,7 @@ void cluster::addPiece(piece p) {
   //cout << p.getID() << endl;
   m_cluster.push_back(m_pieces[p.getRow()][p.getCol()]);
   //cout << m_pieces[p.getRow()][p.getCol()].getID() << endl;
+  m_numPieces++;
 }
 
 bool cluster::checkPiece(piece p) {
