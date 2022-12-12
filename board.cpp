@@ -106,7 +106,7 @@ void board::solve() {
   piece compPiece;
   while (true) {
     copyCluster.copy_cluster(*Q.top().second);
-    //delete Q.top().second;
+    delete Q.top().second;
     Q.pop();
     compCluster = Q.top().second;
     //Q.pop();
@@ -134,11 +134,12 @@ void board::solve() {
     compCluster->print();*/
     Q.push(make_pair(nextPiece,new cluster(copyCluster)));
 
-    compCluster = Q.top().second;
-    /*cout << "next21: " << endl;
-    compCluster->print();*/
     //compCluster = &copyCluster;
     //delete compCluster;
+    //compCluster = Q.top().second;
+    /*cout << "next21: " << endl;
+    compCluster->print();*/
+    
 
     if (runs > 100) {
       break;
