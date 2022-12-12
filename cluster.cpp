@@ -23,8 +23,8 @@ void cluster::createCluster(int rows, int cols, piece p) {
     m_pieces[i] = new piece[cols];
   }
   addPiece(p);
-  u.printBoard(m_pieces,rows,cols);
-  u.printIDs(m_pieces,rows,cols);
+  //u.printBoard(m_pieces,rows,cols);
+  //u.printIDs(m_pieces,rows,cols);
 }
 
 void cluster::addPiece(piece p) {
