@@ -9,7 +9,7 @@ using namespace std;
 
 int main()
 {
-  board b(5,6);
+  board b(3,4);
   b.solve();
   //_CrtDumpMemoryLeaks();
   return 0;

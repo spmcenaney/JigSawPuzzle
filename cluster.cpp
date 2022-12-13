@@ -14,12 +14,12 @@ cluster::cluster(const cluster &c) {           // default constructor
 }
 
 cluster::~cluster() {           // default constructor
-  for (int i = 0; i < m_rows; i ++) {
+  /*for (int i = 0; i < m_rows; i ++) {
     delete [] m_pieces[i];
   }
   if (m_rows > 0) {
     delete [] m_pieces;
-  }
+  }*/
   //m_pieces = nullptr;
 }
 
@@ -139,8 +139,8 @@ bool cluster::checkPiece(cluster &cl) {
       p = cl.getPiece(j);
       addPiece(p);
     }
-    cout << "added:" << endl;
-    u.printBoard(m_pieces,m_rows,m_cols);
+    //cout << "added:" << endl;
+    //u.printBoard(m_pieces,m_rows,m_cols);
     return true;
   } else {
     return false;

@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <queue>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -92,9 +93,13 @@ void board::solve() {
     }
   }
 
+  //random_shuffle(&V.begin(),**V.end());
+
   int runs = 0;
   int numCompPieces;
   piece compPiece;
+
+  int simPar = 600;
 
   int randNum;
   while (V.size() > 1) {
@@ -104,19 +109,25 @@ void board::solve() {
 
     numCompPieces = compCluster->getNumPieces();
 
-    if (copyCluster.checkPiece(*compCluster)) {
+    for (int i = 0; i < simPar; i++){
+      if (copyCluster.checkPiece(*compCluster)) {
         delete compCluster;
         V.erase(V.begin()+randNum);
+        break;
+      } else {
+        randNum = u.randNum(1,V.size()-1);
+        compCluster = V.at(randNum);
+      }
     }
 
-    compCluster = &copyCluster;
+    //compCluster = &copyCluster;
     nextPiece = u.randNum(1,100);
 
     V.push_back(new cluster(copyCluster));
     delete *V.begin();
     V.erase(V.begin());
 
-    if (runs > 550) {
+    if (runs > 2000) {
       cout << "nope" << endl;
       break;
     }
@@ -125,6 +136,7 @@ void board::solve() {
 
   int s = V.size();
   cout << "size: " << s << endl;
+  cout << "runs: " << runs << endl;
 
   compCluster = V.at(0);
   compCluster->print();
