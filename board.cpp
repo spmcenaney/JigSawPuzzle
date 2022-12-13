@@ -150,7 +150,7 @@ void board::solve() {
     }*/
 
     if (copyCluster.checkPiece(*compCluster)) {
-        delete V.at(randNum);
+        delete compCluster;
         V.erase(V.begin()+randNum);
     }
 
