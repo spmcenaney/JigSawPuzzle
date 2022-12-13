@@ -14,12 +14,12 @@ cluster::cluster(const cluster &c) {           // default constructor
 }
 
 cluster::~cluster() {           // default constructor
-  /*for (int i = 0; i < m_rows; i ++) {
+  for (int i = 0; i < m_rows; i ++) {
     delete [] m_pieces[i];
   }
   if (m_rows > 0) {
     delete [] m_pieces;
-  }*/
+  }
   //m_pieces = nullptr;
 }
 
