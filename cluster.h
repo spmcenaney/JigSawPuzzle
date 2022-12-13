@@ -26,7 +26,7 @@ class cluster {
     //Purpose:
     //Pre:
     //Post:
-    bool checkPiece(piece p);
+    bool checkPiece(cluster &c);
     //Purpose: Getter for position
     //Pre: Nothing required
     //Post: Returns position

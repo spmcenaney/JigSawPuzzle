@@ -17,7 +17,9 @@ cluster::~cluster() {           // default constructor
   for (int i = 0; i < m_rows; i ++) {
     delete [] m_pieces[i];
   }
-  delete [] m_pieces;
+  if (m_rows > 0) {
+    delete [] m_pieces;
+  }
   //m_pieces = nullptr;
 }
 
@@ -75,70 +77,82 @@ void cluster::addPiece(piece p) {
   m_numPieces++;
 }
 
-bool cluster::checkPiece(piece p) {
+bool cluster::checkPiece(cluster &cl) {
   bool fits = false;
-  int r = p.getRow();
-  int c = p.getCol();
-  if (p.getSide(LEFT) == 0) {
-    if (p.getSide(TOP) == 0) {
-      if (p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
-       || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)) {
-        fits = true; // top left corner piece
-      } 
+  int r;
+  int c;
+  piece p;
+  for (int j = 0; j < cl.getNumPieces(); j++) {
+    p = cl.getPiece(j);
+    r = p.getRow();
+    c = p.getCol();
+    if (p.getSide(LEFT) == 0) {
+      if (p.getSide(TOP) == 0) {
+        if (p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
+        || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)) {
+          fits = true; // top left corner piece
+        } 
+      } else if (p.getSide(BOTTOM) == 0) {
+        if (p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
+        || p.getSide(TOP) == m_pieces[r-1][c].getSide(BOTTOM)) {
+          fits = true; // bottom left corner piece
+        }
+      } else {
+        if (p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
+        || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)
+        || p.getSide(TOP) == m_pieces[r-1][c].getSide(BOTTOM)) {
+          fits = true; // left side piece
+        }
+      }
+    } else if (p.getSide(TOP) == 0) {
+      if (p.getSide(RIGHT) == 0) {
+        if (p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)
+        || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)) {
+          fits = true; // top right corner piece
+        } 
+      } else {
+        if (p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
+        || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)
+        || p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)) {
+          fits = true; // top side piece
+        }
+      }
+    } else if (p.getSide(RIGHT) == 0) {
+      if (p.getSide(BOTTOM) == 0) {
+        if (p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)
+        || p.getSide(TOP) == m_pieces[r-1][c].getSide(BOTTOM)) {
+          fits = true; // bottom right corner piece
+        } 
+      } else {
+        if (p.getSide(TOP) == m_pieces[r-1][c].getSide(BOTTOM)
+        || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)
+        || p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)) {
+          fits = true; // right side piece
+        }
+      }
     } else if (p.getSide(BOTTOM) == 0) {
-      if (p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
-       || p.getSide(TOP) == m_pieces[r-1][c].getSide(BOTTOM)) {
-        fits = true; // bottom left corner piece
-      }
-    } else {
-      if (p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
-       || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)
-       || p.getSide(TOP) == m_pieces[r-1][c].getSide(BOTTOM)) {
-        fits = true; // left side piece
-      }
-    }
-  } else if (p.getSide(TOP) == 0) {
-    if (p.getSide(RIGHT) == 0) {
-      if (p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)
-       || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)) {
-        fits = true; // top right corner piece
-      } 
-    } else {
-      if (p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
-       || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)
-       || p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)) {
-        fits = true; // top side piece
-      }
-    }
-  } else if (p.getSide(RIGHT) == 0) {
-    if (p.getSide(BOTTOM) == 0) {
-      if (p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)
-       || p.getSide(TOP) == m_pieces[r-1][c].getSide(BOTTOM)) {
-        fits = true; // bottom right corner piece
-      } 
+      if (p.getSide(TOP) == m_pieces[r-1][c].getSide(BOTTOM)
+      || p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
+      || p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)) {
+          fits = true; // bottom side piece
+        }
     } else {
       if (p.getSide(TOP) == m_pieces[r-1][c].getSide(BOTTOM)
-       || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)
-       || p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)) {
-        fits = true; // right side piece
+      || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)
+      || p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
+      || p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)) {
+        fits = true; // middle piece
       }
     }
-  } else if (p.getSide(BOTTOM) == 0) {
-    if (p.getSide(TOP) == m_pieces[r-1][c].getSide(BOTTOM)
-     || p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
-     || p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)) {
-        fits = true; // bottom side piece
-      }
-  } else {
-    if (p.getSide(TOP) == m_pieces[r-1][c].getSide(BOTTOM)
-     || p.getSide(BOTTOM) == m_pieces[r+1][c].getSide(TOP)
-     || p.getSide(RIGHT) == m_pieces[r][c+1].getSide(LEFT)
-     || p.getSide(LEFT) == m_pieces[r][c-1].getSide(RIGHT)) {
-      fits = true; // middle piece
+    if (fits) {
+      break;
     }
   }
   if (fits) {
-    addPiece(p);
+    for (int j = 0; j < cl.getNumPieces(); j++) {
+      p = cl.getPiece(j);
+      addPiece(p);
+    }
     cout << "added:" << endl;
     u.printBoard(m_pieces,m_rows,m_cols);
     return true;

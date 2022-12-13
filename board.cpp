@@ -6,6 +6,7 @@
 #include <string>
 #include <cstdlib>
 #include <queue>
+#include <vector>
 
 using namespace std;
 
@@ -85,17 +86,31 @@ void board::solve() {
   //int numPieces;
   int nextPiece;
 
-  priority_queue<pair<int,cluster*>> Q;
-  pair<int,string> p;
+  //priority_queue<pair<int,cluster*>> Q;
+  //queue<cluster*> Q2;
+  vector<cluster*> V;
+  //pair<int,string> p;
 
   // initial runs
-  for (int i = 0; i < m_rows; i ++) {
+  /*for (int i = 0; i < m_rows; i ++) {
     for (int j = 0; j < m_cols; j ++) {
       currentCluster = new cluster();
       currentCluster->createCluster(m_rows,m_cols,m_pieces[i][j]);
       //numPieces = curCluster->getNumPieces();
       nextPiece = u.randNum(1,100);
       Q.push(make_pair(nextPiece,currentCluster));
+      //V.push_back(currentCluster);
+    }
+  }*/
+
+  for (int i = 0; i < m_rows; i ++) {
+    for (int j = 0; j < m_cols; j ++) {
+      currentCluster = new cluster();
+      currentCluster->createCluster(m_rows,m_cols,m_pieces[i][j]);
+      //numPieces = curCluster->getNumPieces();
+      nextPiece = u.randNum(1,100);
+      //Q.push(make_pair(nextPiece,currentCluster));
+      V.push_back(currentCluster);
     }
   }
 
@@ -104,14 +119,18 @@ void board::solve() {
   int numCompPieces;
   //piece copyPiece;
   piece compPiece;
-  while (true) {
-    copyCluster.copy_cluster(*Q.top().second);
-    delete Q.top().second;
-    Q.pop();
-    compCluster = Q.top().second;
-    //Q.pop();
 
-    /*cout << "copy: " << endl;
+  int randNum;
+  while (V.size() > 1) {
+    //copyCluster.copy_cluster(*Q.top().second);
+    randNum = u.randNum(1,V.size()-1);
+    copyCluster.copy_cluster(**V.begin());
+    compCluster = V.at(randNum);
+    //delete Q.top().second;
+    //Q.pop();
+    //compCluster = Q.top().second;
+
+    /*cout << "copy: " << copyCluster.getNumPieces() << endl;
     copyCluster.print();
     cout << "compare: " << endl;
     compCluster->print();*/
@@ -119,20 +138,33 @@ void board::solve() {
     //numCopyPieces = copyCluster.getNumPieces();
     numCompPieces = compCluster->getNumPieces();
 
-    for (int j = 0; j < numCompPieces; j++) {
+    /*for (int j = 0; j < numCompPieces; j++) {
       compPiece = compCluster->getPiece(j);
       if (copyCluster.checkPiece(compPiece)) {
-        delete Q.top().second;
-        Q.pop();
+        delete V.at(randNum);
+        V.erase(V.begin()+randNum);
+        //delete Q.top().second;
+        //Q.pop();
         break;
       }
+    }*/
+
+    if (copyCluster.checkPiece(*compCluster)) {
+        delete V.at(randNum);
+        V.erase(V.begin()+randNum);
     }
+
+
 
     compCluster = &copyCluster;
     nextPiece = u.randNum(1,100);
+    //cout << " new nume:L " << nextPiece << endl;
     /*cout << "new: " << endl;
     compCluster->print();*/
-    Q.push(make_pair(nextPiece,new cluster(copyCluster)));
+    //Q.push(make_pair(nextPiece,new cluster(copyCluster)));
+    V.push_back(new cluster(copyCluster));
+    //delete V.begin();
+    V.erase(V.begin());
 
     //compCluster = &copyCluster;
     //delete compCluster;
@@ -141,17 +173,25 @@ void board::solve() {
     compCluster->print();*/
     
 
-    if (runs > 100) {
+    if (runs > 550) {
+      cout << "nope" << endl;
       break;
     }
     runs++;
   }
 
-  int s = Q.size();
+  int s = V.size();
   cout << "size: " << s << endl;
 
-  for (int i = 0; i < s; i ++) {
+  compCluster = V.at(0);
+  compCluster->print();
+
+  /*for (int i = 0; i < s; i ++) {
     delete Q.top().second;
     Q.pop();
+  }*/
+  for (int i = 0; i < s; i ++) {
+    //delete &V.back();
+    V.pop_back();
   }
 }
