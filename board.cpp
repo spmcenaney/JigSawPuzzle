@@ -163,7 +163,7 @@ void board::solve() {
     compCluster->print();*/
     //Q.push(make_pair(nextPiece,new cluster(copyCluster)));
     V.push_back(new cluster(copyCluster));
-    //delete V.begin();
+    delete *V.begin();
     V.erase(V.begin());
 
     //compCluster = &copyCluster;
@@ -190,8 +190,8 @@ void board::solve() {
     delete Q.top().second;
     Q.pop();
   }*/
-  for (int i = 0; i < s; i ++) {
-    //delete &V.back();
+  for (int i = 0; i < (s - 1); i ++) {
+    delete &V.back();
     V.pop_back();
   }
 }
