@@ -194,4 +194,6 @@ void board::solve() {
     delete &V.back();
     V.pop_back();
   }
+  delete *V.begin();
+  V.pop_back();
 }
