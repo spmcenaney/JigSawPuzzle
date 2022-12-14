@@ -25,8 +25,8 @@ board::board(int rows, int cols) {
   m_cols = cols;           //sets Y coordinate to y
   createBoard(m_rows,m_cols);
   assignPieces();
-  u.printBoard(m_pieces,rows,cols);
-  u.printIDs(m_pieces,rows,cols);
+  //u.printBoard(m_pieces,rows,cols);
+  //u.printIDs(m_pieces,rows,cols);
 }
 /*board::board(const board &b) {
 }*/
@@ -76,7 +76,7 @@ void board::assignPieces() {
   }
 }
 
-void board::solve() {
+void board::solve(int simPar) {
   cluster *currentCluster;
   cluster *compCluster;
   cluster copyCluster;
@@ -96,10 +96,11 @@ void board::solve() {
   //random_shuffle(&V.begin(),**V.end());
 
   int runs = 0;
+  int fittings = 0;
   int numCompPieces;
   piece compPiece;
 
-  int simPar = 600;
+  //int simPar = 600;
 
   int randNum;
   while (V.size() > 1) {
@@ -110,6 +111,7 @@ void board::solve() {
     numCompPieces = compCluster->getNumPieces();
 
     for (int i = 0; i < simPar; i++){
+      fittings++;
       if (copyCluster.checkPiece(*compCluster)) {
         delete compCluster;
         V.erase(V.begin()+randNum);
@@ -127,24 +129,28 @@ void board::solve() {
     delete *V.begin();
     V.erase(V.begin());
 
-    if (runs > 2000) {
-      cout << "nope" << endl;
+    if (runs > 10000) {
+      //cout << "nope" << endl;
       break;
     }
     runs++;
   }
 
   int s = V.size();
-  cout << "size: " << s << endl;
+  //cout << "size: " << s << endl;
+  /*cout << "Sim Par: " << simPar << endl;
   cout << "runs: " << runs << endl;
+  cout << "fittings: " << fittings << endl << endl;*/
+
+  cout << simPar << ", " << runs << ", " << fittings << ",\n";
 
   compCluster = V.at(0);
-  compCluster->print();
+  //compCluster->print();
 
-  for (int i = 0; i < (s - 1); i ++) {
+  /*for (int i = 0; i < (s - 1); i ++) {
     delete &V.back();
     V.pop_back();
-  }
+  }*/
   delete *V.begin();
   V.pop_back();
 }

@@ -140,7 +140,8 @@ bool cluster::checkPiece(cluster &cl) {
       addPiece(p);
     }
     //cout << "added:" << endl;
-    //u.printBoard(m_pieces,m_rows,m_cols);
+    u.printBoard(m_pieces,m_rows,m_cols);
+    u.printIDs(m_pieces,m_rows,m_cols);
     return true;
   } else {
     return false;

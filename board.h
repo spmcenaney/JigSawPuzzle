@@ -34,7 +34,7 @@ class board {
     //Post: copies variables of board to inputted board
     void copy_board(const board &b);
 
-    void solve();
+    void solve(int simPar);
   private:
     Utilities u;
     int m_rows;
